@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 
 const DATA = Array(10)
@@ -67,7 +67,28 @@ const CartScreen = ({navigation}) => {
       />
 
       <View style={styles.footer}>
-        <Text style={styles.totalPrice}>Total: ${getTotalPrice()}</Text>
+        <View style={styles.promoBox}>
+          <TextInput style={styles.promoInput} />
+          <TouchableOpacity style={styles.btnApplyPromo}>
+            <Text style={styles.txtApply}>Apply</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.total}>
+          <Text style={styles.labelPrice}>Sub Total: </Text>
+          <Text style={styles.totalPrice}>${getTotalPrice()}</Text>
+        </View>
+        <View style={styles.total}>
+          <Text style={styles.labelPrice}>Delivery Fee: </Text>
+          <Text style={styles.totalPrice}>${getTotalPrice()}</Text>
+        </View>
+        <View style={[styles.total, styles.borderSeparate]}>
+          <Text style={styles.labelPrice}>Discount: </Text>
+          <Text style={styles.totalPrice}>${getTotalPrice()}</Text>
+        </View>
+        <View style={[styles.total, {marginTop: 10}]}>
+          <Text style={styles.labelPrice}>Total Cost: </Text>
+          <Text style={styles.totalPrice}>${getTotalPrice()}</Text>
+        </View>
         <TouchableOpacity
           onPress={() =>
             navigation.reset({
@@ -76,7 +97,7 @@ const CartScreen = ({navigation}) => {
             })
           }
           style={styles.checkoutButton}>
-          <Text style={styles.checkoutText}>Checkout</Text>
+          <Text style={styles.checkoutText}>Proceed to Checkout</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -147,9 +168,27 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
     paddingVertical: 10,
     alignItems: 'center',
+    paddingHorizontal: 20,
+    width: '100%',
+  },
+  borderSeparate: {
+    borderBottomWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  total: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  labelPrice: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: 'grey',
   },
   totalPrice: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -157,12 +196,45 @@ const styles = StyleSheet.create({
     backgroundColor: '#4A80F0',
     paddingVertical: 12,
     paddingHorizontal: 25,
-    borderRadius: 5,
+    borderRadius: 50,
+    marginBottom: 10,
+    width: '100%',
+    height: 50,
   },
   checkoutText: {
     fontSize: 16,
     color: '#fff',
     fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  promoBox: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    marginBottom: 10,
+  },
+  promoInput: {
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    borderRadius: 50,
+    padding: 10,
+    width: '100%',
+    height: 49,
+  },
+  btnApplyPromo: {
+    backgroundColor: '#4A80F0',
+    paddingVertical: 10,
+    borderRadius: 50,
+    width: 100,
+    alignItems: 'center',
+    position: 'absolute',
+    right: 0,
+    height: 45,
+    justifyContent: 'center',
+  },
+  txtApply: {
+    color: '#fff',
   },
 });
 
