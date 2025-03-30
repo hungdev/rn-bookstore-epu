@@ -1,28 +1,35 @@
-const randomNumber = new Promise((resolve, reject) => {
-  const url = 'https://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
-  let request = new XMLHttpRequest();
+import { View, Text, Button, TextInput } from 'react-native'
+import React, {useState} from 'react'
 
-  request.open('GET', url);
-  request.onload = function() {
-     if (request.status == '200') {
-        resolve(request.response);
-     } else {
-        reject(Error(request.statusText)); 
-     }
-  };
+const Header = (props) => {
+   // props = {qty: 5}
+   const [text, onChangeText] = useState('');
+   const onChangeTextFn = (vl) => onChangeText(vl)
+    const onAddText = () => {
+      props.getText(text)
+    }
+  return (
+    <View style={{borderWidth: 5}}>
+      <Text style={{fontSize: 30}}>Header {props.qty}</Text>
+      <TextInput
+          onChangeText={onChangeTextFn}
+          value={text}
+        />
+    <Button title="Send" onPress={onAddText} />
+    </View>
+  )
+}
 
-  request.onerror = function() {
-     reject(Error('Error fetching data.'));
-  };
+export default function Demo() {
+   const [textVl, setTextVl] = useState('')
 
-  request.send();
-});
-
-randomNumber
-.then((res) => {
-  console.log("Success");
-  console.log("Random number: ", res);
-})
-.catch((err) => {
-  console.log("Error: ", err.message);
-})
+   const getTextValue = (text) => {
+    setTextVl(text)
+   }
+  return (
+    <View style={{padding: 5,borderWidth: 5, borderColor: 'red'}}>
+      <Header getText={getTextValue}/>
+      <Text style={{fontSize: 30}}>demo: {textVl}</Text>
+    </View>
+  )
+}

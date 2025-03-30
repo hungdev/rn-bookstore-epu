@@ -1,61 +1,245 @@
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
-import TwiterIcon from '../images/twitter.webp'
+import React, {useState} from 'react';
+import {SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar} from 'react-native';
 
-export default function LoginScreen() {
+const LoginScreen = ({navigation}) => {
+  const [username, setUsername] = useState('Limpitsouni');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+
   return (
-    <View style={{backgroundColor: 'white', flex: 1, justifyContent: 'center', padding: 20 }}>
-      <View style={{ backgroundColor: 'rgba(0,0, 0, 0.1)', borderRadius: 10, padding: 15}}>
-        <Text style={{fontWeight: 'bold', fontSize: 25}}>Sign in</Text>
-        <Text style={{marginTop: 15, fontWeight: '700', color: 'grey'}}>Username/Email</Text>
-        <TextInput
-          onChangeText={() => {}}
-          value={''}
-          placeholder='User name'
-          style={{height: 40, borderBottomWidth: 1, borderBottomColor: 'cyan'}}
-        />
-        <TextInput
-          onChangeText={() => {}}
-          value={''}
-          placeholder='Password'
-          style={{marginTop: 20, height: 40, borderBottomWidth: 1, borderBottomColor: 'cyan'}}
-        />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" />
 
-        <View style={{marginTop: 10, flexDirection: 'row', justifyContent: 'space-between'}}>
-          <TouchableOpacity>
-            <Text>Remember me</Text>
+      {/* Logo and Illustration */}
+      <View style={styles.header}>
+        <View style={styles.logoContainer}>
+          <Text style={styles.logoText}>R</Text>
+        </View>
+
+        <Image
+          source={{
+            uri: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721918653l/198902277.jpg',
+          }}
+          style={styles.illustration}
+          resizeMode="contain"
+        />
+      </View>
+
+      {/* Login Form */}
+      <View style={styles.formContainer}>
+        <Text style={styles.title}>Sign in</Text>
+
+        {/* Username/Email Field */}
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>Username/Email</Text>
+          <TextInput style={styles.input} value={username} onChangeText={setUsername} autoCapitalize="none" />
+        </View>
+
+        {/* Password Field */}
+        <View style={styles.inputGroup}>
+          <Text style={styles.inputLabel}>Password</Text>
+          <TextInput style={styles.input} value={password} onChangeText={setPassword} secureTextEntry />
+        </View>
+
+        {/* Remember Me & Forgot Password */}
+        <View style={styles.optionsRow}>
+          <TouchableOpacity style={styles.rememberContainer} onPress={() => setRememberMe(!rememberMe)}>
+            <View style={styles.checkbox}>{rememberMe && <View style={styles.checkboxInner} />}</View>
+            <Text style={styles.rememberText}>Remember me</Text>
           </TouchableOpacity>
+
           <TouchableOpacity>
-            <Text>Forgot password</Text>
+            <Text style={styles.forgotText}>Forgot password?</Text>
           </TouchableOpacity>
         </View>
       </View>
-
-
-      <TouchableOpacity style={{alignItems: 'center', marginTop: 30, backgroundColor: 'cyan', padding: 10, borderRadius:6}}>
-          <Text style={{fontWeight: 'bold', color: 'white' }}>Log in</Text>
+      <View style={styles.action}>
+        {/* Login Button */}
+        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.replace('Main')}>
+          <Text style={styles.loginButtonText}>Log In</Text>
         </TouchableOpacity>
 
-        <Text style={{textAlign: 'center', marginVertical: 30}}>Sign in with</Text>
-
-        <View style={{width: '80%',flexDirection: 'row', justifyContent: 'space-around'}}>
-          <TouchableOpacity style={{backgroundColor: 'cyan',  borderRadius: '100%', height: 25, width: 25, justifyContent: 'center', alignItems: 'center'}}>
-          <Image
-            style={{width: 25, height: 25}}
-            source={TwiterIcon}
-          />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>F</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text>G</Text>
-          </TouchableOpacity>
+        {/* Social Login */}
+        <View style={styles.socialContainer}>
+          <Text style={styles.socialText}>Sign in with</Text>
+          <View style={styles.socialButtons}>
+            <TouchableOpacity style={[styles.socialButton, styles.twitterButton]}>
+              <Text style={styles.socialIcon}>𝕏</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.socialButton, styles.facebookButton]}>
+              <Text style={styles.socialIcon}>f</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.socialButton, styles.googleButton]}>
+              <Text style={styles.socialIcon}>G</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <TouchableOpacity style={{marginTop: 20, justifyContent: 'center', alignItems: 'center'}}>
-          <Text>New user? <Text style={{color: 'cyan'}}>Sign up</Text></Text>
-        </TouchableOpacity>
-    </View>
-  )
-}
+        {/* Sign Up Link */}
+        <View style={styles.signupContainer}>
+          <Text style={styles.signupText}>New user? </Text>
+          <TouchableOpacity>
+            <Text style={styles.signupLink}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#EFF8FB',
+    padding: 20,
+  },
+  header: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  logoContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  logoText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4ECDC4',
+  },
+  illustration: {
+    width: '100%',
+    height: 150,
+  },
+  formContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 30,
+    padding: 24,
+    paddingTop: 30,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 24,
+  },
+  inputGroup: {
+    marginBottom: 20,
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: '#9CA3AF',
+    marginBottom: 8,
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
+    fontSize: 16,
+    paddingVertical: 8,
+    color: '#333',
+  },
+  optionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 30,
+    marginTop: 10,
+  },
+  rememberContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#9CA3AF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  checkboxInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#4ECDC4',
+  },
+  rememberText: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  forgotText: {
+    fontSize: 14,
+    color: '#4ECDC4',
+  },
+  loginButton: {
+    backgroundColor: '#4ECDC4',
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  loginButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  socialContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  socialText: {
+    fontSize: 14,
+    color: '#9CA3AF',
+    marginBottom: 16,
+  },
+  socialButtons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  socialButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  twitterButton: {
+    backgroundColor: '#55ACEE',
+  },
+  facebookButton: {
+    backgroundColor: '#3B5998',
+  },
+  googleButton: {
+    backgroundColor: '#DD4B39',
+  },
+  socialIcon: {
+    color: '#FFFFFF',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  signupContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  signupText: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  signupLink: {
+    fontSize: 14,
+    color: '#4ECDC4',
+    fontWeight: '500',
+  },
+  action: {
+    marginTop: 20,
+  },
+});
+
+export default LoginScreen;
