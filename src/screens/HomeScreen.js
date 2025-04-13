@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -12,7 +12,8 @@ import {
 } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import {useNavigation} from '@react-navigation/native';
-
+import axios from 'axios';
+// https://restful-api-vercel-pied.vercel.app/bookshelf
 // Horizontal Book Item Component
 const HorizontalBookItem = ({title, author, coverUrl}) => {
   const navigation = useNavigation();
@@ -30,11 +31,11 @@ const HorizontalBookItem = ({title, author, coverUrl}) => {
 };
 
 // Vertical Book Item Component for Bookshelf
-const VerticalBookItem = ({title, author, coverUrl}) => {
+const VerticalBookItem = ({title, author, image}) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={styles.verticalBookItem}>
-      <Image source={{uri: coverUrl}} style={styles.bookCover} />
+      <Image source={{uri: image}} style={styles.bookCover} />
       <View style={styles.bookDetails}>
         <Text numberOfLines={1} style={styles.bookTitle}>
           {title}
@@ -48,6 +49,7 @@ const VerticalBookItem = ({title, author, coverUrl}) => {
 };
 
 const BookApp = () => {
+  const [bookshelf, setBookshelf] = useState([]);
   // Sample book data
   const sampleCoverUrl =
     'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721918653l/198902277.jpg';
@@ -123,6 +125,15 @@ const BookApp = () => {
     },
   ];
 
+  useEffect(() => {
+    // Fetch data from API
+    const getBookShelf = async () => {
+      const rs = await axios('https://restful-api-vercel-pied.vercel.app/bookshelf');
+      setBookshelf(rs.data);
+      console.log('rs', rs);
+    };
+    getBookShelf();
+  }, []);
   // Render Header Component for FlatList
   const renderHeader = () => (
     <>
@@ -167,7 +178,7 @@ const BookApp = () => {
       <StatusBar barStyle="dark-content" />
 
       <FlatList
-        data={bookshelfBooks}
+        data={bookshelf}
         keyExtractor={(item, index) => `bookshelf-${index}`}
         renderItem={({item}) => <VerticalBookItem {...item} />}
         numColumns={3}
