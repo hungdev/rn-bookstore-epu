@@ -14,116 +14,10 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 // https://restful-api-vercel-pied.vercel.app/bookshelf
-// Horizontal Book Item Component
-const HorizontalBookItem = ({title, author, coverUrl}) => {
-  const navigation = useNavigation();
-  return (
-    <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={styles.horizontalBookItem}>
-      <Image source={{uri: coverUrl}} style={styles.bookCover} />
-      <Text numberOfLines={1} style={styles.bookTitle}>
-        {title}
-      </Text>
-      <Text numberOfLines={1} style={styles.bookAuthor}>
-        {author}
-      </Text>
-    </TouchableOpacity>
-  );
-};
-
-// Vertical Book Item Component for Bookshelf
-const VerticalBookItem = ({title, author, image}) => {
-  const navigation = useNavigation();
-  return (
-    <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={styles.verticalBookItem}>
-      <Image source={{uri: image}} style={styles.bookCover} />
-      <View style={styles.bookDetails}>
-        <Text numberOfLines={1} style={styles.bookTitle}>
-          {title}
-        </Text>
-        <Text numberOfLines={1} style={styles.bookAuthor}>
-          {author}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
 
 const BookApp = () => {
+  const navigation = useNavigation();
   const [bookshelf, setBookshelf] = useState([]);
-  // Sample book data
-  const sampleCoverUrl =
-    'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1721918653l/198902277.jpg';
-
-  const readingBooks = [
-    {
-      title: 'The Beach House',
-      author: 'Mary Alice Monroe',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The life-changing magic of tidying up',
-      author: 'Marie Kondō',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Sold on a Monday',
-      author: 'Kristina Morris',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The life-changing magic of tidying up',
-      author: 'Marie Kondō',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Sold on a Monday',
-      author: 'Kristina Morris',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The life-changing magic of tidying up',
-      author: 'Marie Kondō',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Sold on a Monday',
-      author: 'Kristina Morris',
-      coverUrl: sampleCoverUrl,
-    },
-  ];
-
-  const bookshelfBooks = [
-    {
-      title: 'The Orphan Sisters',
-      author: 'Shirley Dickson',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Daughters of War',
-      author: 'Lizzie Page',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The Runaway Children',
-      author: 'Sandy Taylor',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Sprint',
-      author: 'Jake Knapp',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'Contagious',
-      author: 'Jonah Berger',
-      coverUrl: sampleCoverUrl,
-    },
-    {
-      title: 'The Pieces We Keep',
-      author: 'Kristina McMorris',
-      coverUrl: sampleCoverUrl,
-    },
-  ];
 
   useEffect(() => {
     // Fetch data from API
@@ -134,56 +28,32 @@ const BookApp = () => {
     };
     getBookShelf();
   }, []);
-  // Render Header Component for FlatList
-  const renderHeader = () => (
-    <>
-      {/* Search Bar */}
-      <View style={styles.searchBar}>
-        <Ionicons name="search-outline" size={20} color="#999" />
-        <TextInput style={styles.searchInput} placeholder="Search" placeholderTextColor="#999" />
-        <Ionicons name="mic-outline" size={20} color="#999" />
-      </View>
 
-      {/* Reading Section */}
-      <View style={styles.shelfSection}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Reading</Text>
-          <TouchableOpacity>
-            <Text style={styles.viewAllText}>View all</Text>
-          </TouchableOpacity>
+  const renderItem = item => {
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate('Detail', {id: item?.id})} style={styles.verticalBookItem}>
+        <Image source={{uri: item?.image}} style={styles.bookCover} />
+        <View style={styles.bookDetails}>
+          <Text numberOfLines={1} style={styles.bookTitle}>
+            {item?.title}
+          </Text>
+          <Text numberOfLines={1} style={styles.bookAuthor}>
+            {item?.author}
+          </Text>
         </View>
-
-        <FlatList
-          data={readingBooks}
-          keyExtractor={(item, index) => `reading-${index}`}
-          renderItem={({item}) => <HorizontalBookItem {...item} />}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.readingList}
-        />
-      </View>
-
-      {/* Bookshelf Section Header */}
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Bookshelf</Text>
-        <TouchableOpacity>
-          <Text style={styles.viewAllText}>View all</Text>
-        </TouchableOpacity>
-      </View>
-    </>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-
       <FlatList
         data={bookshelf}
         keyExtractor={(item, index) => `bookshelf-${index}`}
-        renderItem={({item}) => <VerticalBookItem {...item} />}
+        renderItem={({item}) => renderItem(item)}
         numColumns={3}
         columnWrapperStyle={styles.bookshelfRow}
-        ListHeaderComponent={renderHeader}
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>

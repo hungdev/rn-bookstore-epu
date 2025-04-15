@@ -133,8 +133,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <AuthStack.Navigator>
-        <AuthStack.Screen name="Auth" component={AuthStackScreen} options={{headerShown: false}} />
         <AuthStack.Screen name="Main" component={MainStackScreen} options={{headerShown: false}} />
+        <AuthStack.Screen name="Auth" component={AuthStackScreen} options={{headerShown: false}} />
       </AuthStack.Navigator>
     </NavigationContainer>
   );
