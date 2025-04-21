@@ -2,10 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, Image, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import axios from 'axios';
-// import {addProduct} from '../store/productSlice';
+import {useSelector, useDispatch} from 'react-redux';
+import {addProduct} from '../store/productSlice';
 
 const BookDetailsScreen = ({navigation, route}) => {
   const {id} = route.params;
+  const dispatch = useDispatch();
 
   const [bookshelf, setBookshelf] = useState([]);
   useEffect(() => {
@@ -19,8 +21,9 @@ const BookDetailsScreen = ({navigation, route}) => {
   }, []);
 
   const onAddCart = () => {
-    // dispatch(addProduct(productDetail));
-    // navigation.navigate('Cart')
+    // gui di
+    dispatch(addProduct({...bookshelf, quantity: 1})); // bookshelf = {id: 1, title: 'Harry potter',}
+    navigation.navigate('Cart');
   };
   return (
     <ScrollView style={styles.container}>

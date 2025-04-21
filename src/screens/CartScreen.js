@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import {useSelector, useDispatch} from 'react-redux';
 
 const DATA = Array(10)
   .fill()
@@ -15,6 +16,7 @@ const DATA = Array(10)
 
 const CartScreen = ({navigation}) => {
   const [cartItems, setCartItems] = useState(DATA);
+  const products = useSelector(state => state.product.products);
 
   const increaseQuantity = id => {
     setCartItems(cartItems.map(item => (item.id === id ? {...item, quantity: item.quantity + 1} : item)));
@@ -38,7 +40,7 @@ const CartScreen = ({navigation}) => {
     <View style={styles.container}>
       <FlatList
         style={styles.list}
-        data={cartItems}
+        data={products}
         keyExtractor={item => item.id}
         renderItem={({item}) => (
           <View style={styles.cartItem}>
@@ -46,7 +48,7 @@ const CartScreen = ({navigation}) => {
             <View style={styles.itemDetails}>
               <Text style={styles.bookTitle}>{item.title}</Text>
               <Text style={styles.bookAuthor}>By {item.author}</Text>
-              <Text style={styles.bookPrice}>${item.price.toFixed(2)}</Text>
+              <Text style={styles.bookPrice}>{/* ${item?.price?.toFixed(2)} */}</Text>
               <View style={styles.quantityContainer}>
                 <TouchableOpacity onPress={() => decreaseQuantity(item.id)} style={styles.quantityButton}>
                   <Ionicons name="remove-circle-outline" size={24} color="#4A80F0" />
