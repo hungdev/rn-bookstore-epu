@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, Image, FlatList, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import {useSelector, useDispatch} from 'react-redux';
+import {increaseQty} from '../store/productSlice';
 
 const DATA = Array(10)
   .fill()
@@ -15,11 +16,13 @@ const DATA = Array(10)
   }));
 
 const CartScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState(DATA);
   const products = useSelector(state => state.product.products);
 
   const increaseQuantity = id => {
-    setCartItems(cartItems.map(item => (item.id === id ? {...item, quantity: item.quantity + 1} : item)));
+    // setCartItems(cartItems.map(item => (item.id === id ? {...item, quantity: item.quantity + 1} : item)));
+    dispatch(increaseQty(id));
   };
 
   const decreaseQuantity = id => {
