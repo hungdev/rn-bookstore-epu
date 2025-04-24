@@ -10,6 +10,7 @@ import CategoryScreen from '../screens/CategoryScreen';
 import CommentScreen from '../screens/CommentScreen';
 import CartScreen from '../screens/CartScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import FavoriteScreen from '../screens/FavoriteScreen';
 import Ionicons from '@react-native-vector-icons/ionicons';
 
 const getTabBarIcon = (route, focused, size) => {
@@ -52,11 +53,11 @@ const RegisterScreen = ({navigation}) => (
 //   </View>
 // );
 
-const FavoriteScreen = () => (
-  <View>
-    <Text>Favorite Screen</Text>
-  </View>
-);
+// const FavoriteScreen = () => (
+//   <View>
+//     <Text>Favorite Screen</Text>
+//   </View>
+// );
 // const UserScreen = () => (
 //   <View>
 //     <Text>User Screen</Text>

@@ -2,12 +2,17 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialState = {
   products: [],
+  favorites: [],
 };
 
 export const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
+    addFavorite: (state, action) => {
+      // action.payload la gia tri gui tu bên detail qua là bookshelf
+      state.favorites = [...state.favorites, action.payload];
+    },
     addProduct: (state, action) => {
       console.log('action', action.payload); // bookshelf = {id: 1, title: 'Harry potter',}
       const itemFound = state.products.find(el => el.id === action.payload.id);
@@ -39,6 +44,6 @@ export const productSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {addProduct, increaseQty} = productSlice.actions;
+export const {addProduct, increaseQty, addFavorite} = productSlice.actions;
 
 export default productSlice.reducer;

@@ -3,7 +3,7 @@ import {View, Text, Image, ScrollView, TouchableOpacity, StyleSheet} from 'react
 import Ionicons from '@react-native-vector-icons/ionicons';
 import axios from 'axios';
 import {useSelector, useDispatch} from 'react-redux';
-import {addProduct} from '../store/productSlice';
+import {addProduct, addFavorite} from '../store/productSlice';
 
 const BookDetailsScreen = ({navigation, route}) => {
   const {id} = route.params;
@@ -24,6 +24,11 @@ const BookDetailsScreen = ({navigation, route}) => {
     // gui di
     dispatch(addProduct({...bookshelf, quantity: 1})); // bookshelf = {id: 1, title: 'Harry potter',}
     navigation.navigate('Cart');
+  };
+
+  const onHandleAddFavorite = () => {
+    // dispatch(ten_ham_gui(gia_tri_can_gui))
+    dispatch(addFavorite(bookshelf)); // bookshelf = {id: 1, title: 'harry pottrer'}
   };
   return (
     <ScrollView style={styles.container}>
@@ -119,8 +124,8 @@ const BookDetailsScreen = ({navigation, route}) => {
 
       {/* Action buttons */}
       <View style={styles.actionButtonsContainer}>
-        <TouchableOpacity style={styles.freeTrialButton}>
-          <Text style={styles.freeTrialText}>Free trials</Text>
+        <TouchableOpacity style={styles.freeTrialButton} onPress={onHandleAddFavorite}>
+          <Text style={styles.freeTrialText}>Add favorite</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onAddCart} style={styles.buyNowButton}>
