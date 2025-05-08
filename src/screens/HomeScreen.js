@@ -10,23 +10,28 @@ import {
   StatusBar,
   FlatList,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import {useNavigation} from '@react-navigation/native';
-import axios from 'axios';
+import {getBookShelf} from '../store/productSlice';
 // https://restful-api-vercel-pied.vercel.app/bookshelf
 
 const BookApp = () => {
   const navigation = useNavigation();
-  const [bookshelf, setBookshelf] = useState([]);
+  // const [bookshelf, setBookshelf] = useState([]);
+  const dispatch = useDispatch();
+
+  const bookshelf = useSelector(state => state.product?.productList);
 
   useEffect(() => {
     // Fetch data from API
-    const getBookShelf = async () => {
-      const rs = await axios('https://restful-api-vercel-pied.vercel.app/bookshelf');
-      setBookshelf(rs.data);
-      console.log('rs', rs);
-    };
-    getBookShelf();
+    // const getBookShelf = async () => {
+    //   const rs = await axios('https://restful-api-vercel-pied.vercel.app/bookshelf');
+    //   setBookshelf(rs.data);
+    //   console.log('rs', rs);
+    // };
+    // getBookShelf();
+    dispatch(getBookShelf());
   }, []);
 
   const renderItem = item => {

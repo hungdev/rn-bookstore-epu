@@ -1,9 +1,16 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const initialState = {
   products: [],
   favorites: [],
+  productList: [],
 };
+
+export const getBookShelf = createAsyncThunk('product/getBookShelf', async (userId, thunkAPI) => {
+  const response = await axios('https://restful-api-vercel-pied.vercel.app/bookshelf');
+  return response.data;
+});
 
 export const productSlice = createSlice({
   name: 'product',
@@ -40,6 +47,12 @@ export const productSlice = createSlice({
       });
       state.products = newProducts;
     },
+  },
+  extraReducers: builder => {
+    // Add reducers for additional action types here, and handle loading state as needed
+    builder.addCase(getBookShelf.fulfilled, (state, action) => {
+      state.productList = action.payload; // action.payload chinh la response.data; dong 12
+    });
   },
 });
 
