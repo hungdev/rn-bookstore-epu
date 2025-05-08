@@ -19,6 +19,11 @@ const CartScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState(DATA);
   const products = useSelector(state => state.product.products);
+  const totalPrice = products.reduce((acc, ele) => {
+    return acc + Number(ele.price);
+  }, 0);
+
+  console.log('aaaa', products);
 
   const increaseQuantity = id => {
     // setCartItems(cartItems.map(item => (item.id === id ? {...item, quantity: item.quantity + 1} : item)));
@@ -29,10 +34,6 @@ const CartScreen = ({navigation}) => {
     setCartItems(
       cartItems.map(item => (item.id === id && item.quantity > 1 ? {...item, quantity: item.quantity - 1} : item)),
     );
-  };
-
-  const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   };
 
   const removeItem = id => {
@@ -51,7 +52,7 @@ const CartScreen = ({navigation}) => {
             <View style={styles.itemDetails}>
               <Text style={styles.bookTitle}>{item.title}</Text>
               <Text style={styles.bookAuthor}>By {item.author}</Text>
-              <Text style={styles.bookPrice}>{/* ${item?.price?.toFixed(2)} */}</Text>
+              <Text style={styles.bookPrice}>{item?.price}</Text>
               <View style={styles.quantityContainer}>
                 <TouchableOpacity onPress={() => decreaseQuantity(item.id)} style={styles.quantityButton}>
                   <Ionicons name="remove-circle-outline" size={24} color="#4A80F0" />
@@ -72,7 +73,7 @@ const CartScreen = ({navigation}) => {
       />
 
       <View style={styles.footer}>
-        <View style={styles.promoBox}>
+        {/* <View style={styles.promoBox}>
           <TextInput style={styles.promoInput} />
           <TouchableOpacity style={styles.btnApplyPromo}>
             <Text style={styles.txtApply}>Apply</Text>
@@ -89,10 +90,10 @@ const CartScreen = ({navigation}) => {
         <View style={[styles.total, styles.borderSeparate]}>
           <Text style={styles.labelPrice}>Discount: </Text>
           <Text style={styles.totalPrice}>${getTotalPrice()}</Text>
-        </View>
+        </View> */}
         <View style={[styles.total, {marginTop: 10}]}>
           <Text style={styles.labelPrice}>Total Cost: </Text>
-          <Text style={styles.totalPrice}>${getTotalPrice()}</Text>
+          <Text style={styles.totalPrice}>{totalPrice}</Text>
         </View>
         <TouchableOpacity
           onPress={() =>
