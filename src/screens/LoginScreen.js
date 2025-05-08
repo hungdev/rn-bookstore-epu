@@ -1,10 +1,28 @@
 import React, {useState} from 'react';
 import {SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar} from 'react-native';
+import {useForm, Controller} from 'react-hook-form';
 
 const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('Limpitsouni');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+  });
+
+  console.log('aeee', errors);
+
+  const onLogin = data => {
+    console.log('aaaaa', data);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -32,13 +50,53 @@ const LoginScreen = ({navigation}) => {
         {/* Username/Email Field */}
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Username/Email</Text>
-          <TextInput style={styles.input} value={username} onChangeText={setUsername} autoCapitalize="none" />
+          {/* <TextInput style={styles.input} value={username} onChangeText={setUsername} autoCapitalize="none" /> */}
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+              maxLength: {
+                value: 8,
+                message: 'Username cannot exceed 8 characters',
+              },
+              pattern: {
+                value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                message: 'Invalid email address',
+              },
+              validate: value => value.startsWith('A') || 'Must start with the letter A',
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              // <TextInput placeholder="First name" onBlur={onBlur} onChangeText={onChange} value={value} />
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                value={value}
+                onChangeText={onChange}
+                autoCapitalize="none"
+              />
+            )}
+            name="username"
+          />
+          {errors.username && <Text style={{color: 'red'}}>{errors?.username?.message}</Text>}
         </View>
 
         {/* Password Field */}
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Password</Text>
-          <TextInput style={styles.input} value={password} onChangeText={setPassword} secureTextEntry />
+          {/* <TextInput style={styles.input} value={password} onChangeText={setPassword} secureTextEntry /> */}
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({field: {onChange, onBlur, value}}) => (
+              // <TextInput placeholder="First name" onBlur={onBlur} onChangeText={onChange} value={value} />
+              // <TextInput style={styles.input} value={value} onChangeText={onChange} autoCapitalize="none" />
+              <TextInput style={styles.input} onBlur={onBlur} value={value} onChangeText={onChange} secureTextEntry />
+            )}
+            name="password"
+          />
+          {errors.password && <Text style={{color: 'red'}}>{errors.password?.message}</Text>}
         </View>
 
         {/* Remember Me & Forgot Password */}
@@ -55,7 +113,8 @@ const LoginScreen = ({navigation}) => {
       </View>
       <View style={styles.action}>
         {/* Login Button */}
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.replace('Main')}>
+        {/* <TouchableOpacity style={styles.loginButton} onPress={() => navigation.replace('Main')}> */}
+        <TouchableOpacity style={styles.loginButton} onPress={handleSubmit(onLogin)}>
           <Text style={styles.loginButtonText}>Log In</Text>
         </TouchableOpacity>
 
