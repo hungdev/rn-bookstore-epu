@@ -1,10 +1,37 @@
 import {configureStore} from '@reduxjs/toolkit';
+import {combineReducers} from 'redux';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {persistReducer} from 'redux-persist';
 import userSlice from './userSlice';
 import productSlice from './productSlice';
 
+export const allReducers = combineReducers({
+  user: userSlice,
+  product: productSlice,
+  // thêm reducer khác vào đây
+});
+
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  // persist
+  // whitelist: [
+  //   'accountReducer'
+  // ],
+  //not persist
+  blacklist: [
+    // 'dict',
+    // 'auth'
+  ],
+};
+
+const persistedReducer = persistReducer(persistConfig, allReducers);
+
 export const store = configureStore({
-  reducer: {
-    user: userSlice,
-    product: productSlice,
-  },
+  reducer: persistedReducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
